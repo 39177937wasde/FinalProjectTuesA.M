@@ -12,11 +12,9 @@ import kotlin.jvm.internal.Intrinsics
 class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(context, attrs),SurfaceHolder.Callback{
     var surfaceHolder: SurfaceHolder = holder
     var BG:Bitmap
-    object count {
-        val displayMetrics = DisplayMetrics()
-        var width = displayMetrics.widthPixels
-        var height = displayMetrics.heightPixels
-    }
+
+
+
 
     init{
         surfaceHolder = getHolder()
