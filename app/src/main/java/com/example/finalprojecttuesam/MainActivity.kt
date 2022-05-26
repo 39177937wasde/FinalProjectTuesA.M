@@ -1,19 +1,48 @@
 package com.example.finalprojecttuesam
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+
 import android.graphics.Canvas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.DisplayMetrics
-import android.view.SurfaceHolder
+import android.view.View
+import android.widget.ImageView
 import com.example.finalprojecttuesam.databinding.ActivityMainBinding
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var binding: ActivityMainBinding
+    lateinit var job: Job
+    lateinit var pic:ImageView
+    var click:Boolean=false
+    lateinit var surface:MySurfaceView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        //setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        surface=binding.mysv
+        pic=binding.start
+        pic.setOnClickListener(object:View.OnClickListener{
+            override fun onClick(p0: View?) {
+                if(click){
+                    click=false
+                    pic.setImageResource(R.drawable.start)
+                    job.cancel()
+                }
+                else{
+                    click=true
+                    pic.setImageResource(R.drawable.stop)
+                    job=GlobalScope.launch(Dispatchers.Main) {
+                        while (click) {
+                            delay(25)
+                            var canvas: Canvas = surface.surfaceHolder.lockCanvas()
+                            surface.drawSomething(canvas)
+                            surface.surfaceHolder.unlockCanvasAndPost(canvas)
+                        }
+                    }
+                }
+            }
+        })
     }
+
 }
