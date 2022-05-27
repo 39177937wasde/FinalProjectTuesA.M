@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                     pic.setImageResource(R.drawable.stop)
                     job=GlobalScope.launch(Dispatchers.Main) {
                         while (click) {
-                            delay(25)
+                            delay(1)
                             surface.airplane.update()
                             var canvas: Canvas = surface.surfaceHolder.lockCanvas()
                             surface.drawSomething(canvas)

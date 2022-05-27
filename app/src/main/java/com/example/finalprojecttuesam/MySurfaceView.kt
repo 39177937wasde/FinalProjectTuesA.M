@@ -2,6 +2,7 @@ package com.example.finalprojecttuesam
 
 import android.content.Context
 import android.graphics.*
+import android.media.MediaPlayer
 import android.util.AttributeSet
 import android.util.DisplayMetrics
 import android.view.*
@@ -11,38 +12,46 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     var BG:Bitmap
     var BGmoveX:Int = 0
     var airplane:AirPlane
+    lateinit var shoot:MediaPlayer
     var gDetector:GestureDetector
     init{
         airplane=AirPlane(context!!)
         surfaceHolder = getHolder()
-        BG = BitmapFactory.decodeResource(getResources(), com.example.finalprojecttuesam.R.drawable.background)
+        BG = BitmapFactory.decodeResource(getResources(),R.drawable.background)
         surfaceHolder.addCallback(this)
         gDetector= GestureDetector(context,this)
+        shoot = MediaPlayer.create(context, R.raw.shoot)
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
 
-        val canvas = surfaceHolder.lockCanvas()
+        var canvas:Canvas = surfaceHolder.lockCanvas()
         drawSomething(canvas)
         surfaceHolder.unlockCanvasAndPost(canvas)
     }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+
+    }
     fun drawSomething(canvas:Canvas) {
-
-
         var RectPic:Rect=Rect(0, 0, BG.getWidth(),BG.getHeight())
-        var a: Rect = Rect(0, 0, width, height)
-        canvas.drawBitmap(BG,RectPic, a,null)
-
+        var wid:Int=width
+        var hei:Int=height
+        var a: Rect = Rect(0, 0, wid, hei)
         BGmoveX-=2
-        var BGnewX:Int = BG.width + BGmoveX
+        var BGnewX:Int = wid + BGmoveX
 
         if (BGnewX <= 0) {
             BGmoveX = 0
             canvas.drawBitmap(BG,RectPic,a ,null)
         } else {
-            a=Rect(BGmoveX,0,BGmoveX+width,height)
+            a=Rect(BGmoveX,0,BGmoveX+wid,hei)
             canvas.drawBitmap(BG, RectPic, a, null)
-            a=Rect(BGnewX, 0, BGnewX+width, height)
+            a=Rect(BGnewX, 0, BGnewX+wid,hei)
             canvas.drawBitmap(BG, RectPic, a, null)
         }
 
@@ -55,20 +64,17 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     }
 
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-
-    }
-
     override fun onDown(e: MotionEvent?): Boolean {
         return true
     }
 
     override fun onShowPress(e: MotionEvent?) {
+        if (e!!.x >= 0 && e!!.x <= airplane.w && e!!.y >= airplane.AirpalneY && e!!.y <= airplane.AirpalneY + airplane.w) {
+            airplane.shoot=1
+            shoot = MediaPlayer.create(context, R.raw.shoot)
+            shoot.start()
 
+        }
     }
 
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
