@@ -2,8 +2,10 @@ package com.example.finalprojecttuesam
 
 
 import android.graphics.Canvas
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var job: Job
     lateinit var pic:ImageView
+    lateinit var airplane:AirPlane
     var click:Boolean=false
     lateinit var surface:MySurfaceView
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                     job=GlobalScope.launch(Dispatchers.Main) {
                         while (click) {
                             delay(25)
+                            surface.airplane.update()
                             var canvas: Canvas = surface.surfaceHolder.lockCanvas()
                             surface.drawSomething(canvas)
                             surface.surfaceHolder.unlockCanvasAndPost(canvas)
