@@ -10,16 +10,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FinalProjectTuesAM">
         <activity
-            android:name=".MainActivity"
             android:scaleType="centerInside"
             android:screenOrientation="landscape"
-            android:exported="true">
+            android:name=".Rank"
+            android:exported="false" />
+        <activity
+            android:name=".Start"
+            android:exported="true"
+            android:scaleType="centerInside"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".User"
+            android:exported="true"
+            android:scaleType="centerInside"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".GameOver"
+            android:exported="false"
+            android:scaleType="centerInside"
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:scaleType="centerInside"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

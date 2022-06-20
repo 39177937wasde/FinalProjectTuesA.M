@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "530071748803",
+    "project_id": "finalprojecttuesam",
+    "storage_bucket": "finalprojecttuesam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:530071748803:android:74900c513a11630ba5a276",
+        "android_client_info": {
+          "package_name": "com.example.finalprojecttuesam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "530071748803-gtq5d3075pvcv8q0n61j9197s72nl145.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3dS6XMk-K8LTVHIZtQeXsWIsPu_qWbKg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "530071748803-gtq5d3075pvcv8q0n61j9197s72nl145.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

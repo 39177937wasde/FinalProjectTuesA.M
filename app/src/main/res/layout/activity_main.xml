@@ -15,28 +15,6 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
 
-    <ImageView
-        android:id="@+id/start"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/myPic"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/start"></ImageView>
-
-    <ImageView
-        android:id="@+id/myPic"
-        android:layout_width="100dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/start"
-        app:srcCompat="@drawable/mypic"></ImageView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

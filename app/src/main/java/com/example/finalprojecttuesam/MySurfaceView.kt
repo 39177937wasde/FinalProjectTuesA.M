@@ -2,32 +2,40 @@ package com.example.finalprojecttuesam
 
 import android.content.Context
 import android.graphics.*
-import android.media.MediaPlayer
 import android.util.AttributeSet
-import android.util.DisplayMetrics
+import android.util.Log
 import android.view.*
 
 class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(context, attrs),SurfaceHolder.Callback, GestureDetector.OnGestureListener{
     var surfaceHolder: SurfaceHolder = holder
     var BG:Bitmap
+    var img2:Bitmap
     var BGmoveX:Int = 0
-    var airplane:AirPlane
-    lateinit var shoot:MediaPlayer
+    var gameStatus:GameStatus
+    var boxw:Int=0
+    var boxh=0
+    var boxy=0
+    var boxX=0.0
     var gDetector:GestureDetector
+    lateinit var canvas:Canvas
     init{
-        airplane=AirPlane(context!!)
-        surfaceHolder = getHolder()
-        BG = BitmapFactory.decodeResource(getResources(),R.drawable.background)
+        gameStatus=GameStatus(context!!)
+        surfaceHolder = holder
+        BG = BitmapFactory.decodeResource(resources,R.drawable.bg)
+        img2=BitmapFactory.decodeResource(resources,R.drawable.box01)
         surfaceHolder.addCallback(this)
         gDetector= GestureDetector(context,this)
-        shoot = MediaPlayer.create(context, R.raw.shoot)
+        boxh=img2.height/2
+        boxw=img2.width/2
+        boxy=gameStatus.PlayerY+25
+        boxX=(width-boxw).toDouble()
     }
 
     override fun surfaceCreated(holder: SurfaceHolder) {
+            canvas = surfaceHolder.lockCanvas()
+            drawSomething(canvas)
+            surfaceHolder.unlockCanvasAndPost(canvas)
 
-        var canvas:Canvas = surfaceHolder.lockCanvas()
-        drawSomething(canvas)
-        surfaceHolder.unlockCanvasAndPost(canvas)
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
@@ -35,10 +43,15 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
-
+        Log.d(this.toString(),"有跑到",null)
     }
     fun drawSomething(canvas:Canvas) {
         var RectPic:Rect=Rect(0, 0, BG.getWidth(),BG.getHeight())
+
+
+       var boxSrcRect=Rect(0,0,img2.width,img2.height)
+
+       // var boxDestRect = Rect(boxX.toInt(),  boxy, width,  airplane.AirplaneY+boxh+25 )
         var wid:Int=width
         var hei:Int=height
         var a: Rect = Rect(0, 0, wid, hei)
@@ -48,33 +61,30 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
         if (BGnewX <= 0) {
             BGmoveX = 0
             canvas.drawBitmap(BG,RectPic,a ,null)
+            //canvas.drawBitmap(img2,boxDestRect,boxSrcRect ,null)
         } else {
             a=Rect(BGmoveX,0,BGmoveX+wid,hei)
+            //canvas.drawBitmap(img2,boxSrcRect, a,null)
             canvas.drawBitmap(BG, RectPic, a, null)
             a=Rect(BGnewX, 0, BGnewX+wid,hei)
+            //canvas.drawBitmap(img2,boxSrcRect, a,null)
             canvas.drawBitmap(BG, RectPic, a, null)
         }
-
-        val paint = Paint(1)
-        paint.setColor(-16776961)
-        paint.setTextSize(50.0f)
-        canvas.drawText("射擊遊戲(作者：資管二A 陳柏睿)", 50.0f, 50.0f, paint)
-        airplane.draw(canvas)
+        gameStatus.draw(canvas)
 
     }
-
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        gDetector.onTouchEvent(event)
+        return true
+    }
 
     override fun onDown(e: MotionEvent?): Boolean {
+        SharedData.flag=1
+
         return true
     }
 
     override fun onShowPress(e: MotionEvent?) {
-        if (e!!.x >= 0 && e!!.x <= airplane.w && e!!.y >= airplane.AirpalneY && e!!.y <= airplane.AirpalneY + airplane.w) {
-            airplane.shoot=1
-            shoot = MediaPlayer.create(context, R.raw.shoot)
-            shoot.start()
-
-        }
     }
 
     override fun onSingleTapUp(e: MotionEvent?): Boolean {
@@ -87,12 +97,12 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
         distanceX: Float,
         distanceY: Float
     ): Boolean {
-        airplane.AirpalneY=e2!!.y.toInt()-airplane.h/2
+        //airplane.AirpalneY=e2!!.y.toInt()-airplane.h/2
         return true
     }
 
     override fun onLongPress(e: MotionEvent?) {
-        TODO("Not yet implemented")
+
     }
 
     override fun onFling(
@@ -103,8 +113,8 @@ class MySurfaceView(context: Context?, attrs: AttributeSet?) : SurfaceView(conte
     ): Boolean {
         return true
     }
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        gDetector.onTouchEvent(event)
-        return true
+    fun relase() {
+        BG.recycle()
     }
+
 }
