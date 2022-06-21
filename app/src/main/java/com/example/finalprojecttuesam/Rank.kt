@@ -21,34 +21,14 @@ class Rank : AppCompatActivity() {
             val intent = Intent(this, GameOver::class.java)
             startActivity(intent)
         }
-        var docref=db.collection("Users")
-            .document("${SharedData.userName}")
-        docref.get().addOnCompleteListener(){task->
-            if (task.isSuccessful) {
-                val document = task.result
-                if(document != null) {
-                    if(document.exists()){
-                        //Log.d("TAG", "Document already exists ${docref.get(user.getValue(SharedData.userName) as Source)}")
-                        user["score"] =SharedData.finalscore
-                        docref.update(user)
-                    }else{
-                        Log.d("TAG", "Document doesn't exist.")
-                        user["score"] =SharedData.finalscore
-                        docref.set(user)
 
-                    }
-                }else{
-                    Log.d("TAG", "Error: ", task.exception)
-                }
-            }
-        }
         read()
     }
     fun read(){
         var txv=findViewById<TextView>(R.id.txv)
 
         db.collection("Users")
-            .orderBy("score", Query.Direction.ASCENDING)
+            .orderBy("score", Query.Direction.DESCENDING)
             .limit(5)
             .get()
             .addOnCompleteListener { task ->

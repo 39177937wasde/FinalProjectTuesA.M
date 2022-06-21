@@ -8,6 +8,7 @@ import android.graphics.*
 import android.provider.SyncStateContract.Helpers.update
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
+import kotlinx.coroutines.delay
 import java.util.*
 
 class GameStatus(context: Context) {
@@ -24,10 +25,12 @@ class GameStatus(context: Context) {
     var boxX:Float=0f
     var boxmovingX:Float=-10f
     var boxnewX=0f
+    var boxnewX2=0f
     var FinalScore=0L
     lateinit var main:MainActivity
     var img: Bitmap
     var img2: Bitmap
+    var flag:Boolean=false
     init {
         SharedData.ground=(res.displayMetrics.heightPixels*3.7/5).toInt()
         img = BitmapFactory.decodeResource(res, R.drawable.run00)
@@ -37,20 +40,41 @@ class GameStatus(context: Context) {
         boxX=width-img2.width.toFloat()
         boxy=(boxHeight+25).toFloat()
         boxnewX=width-img2.width.toFloat()
+        boxnewX2=width-img2.width.toFloat()
         scorePaint.color = Color.BLACK
         scorePaint.textSize = 70F
         scorePaint.typeface = Typeface.DEFAULT_BOLD
         scorePaint.isAntiAlias = true
     }
-    var shoot:Int=0
+    var walk:Int=0
     fun draw(canvas: Canvas) {
 
         boxnewX+=boxmovingX
-        if(img.width>=boxnewX&&PlayerY.toFloat()>=boxHeight){
+        if(img.width>=boxnewX&&PlayerY>=boxHeight-img2.height||(img.width>=boxnewX2)&&(PlayerY.toFloat()>=boxHeight-img2.height)){
+            Log.d(this.toString(),"img.width:${img.width},$boxnewX PlayerY.toFloat():${PlayerY.toFloat()},${boxHeight-img2.height}",null)
             SharedData.die=true
             //val i= Intent(Context!=this, GameOver::class.java)
+        }/*else if((img.width>=boxnewX2)&&(PlayerY.toFloat()>=boxHeight)){
+
+            SharedData.die=true
+        }*/
+
+        if(boxnewX==(width/2).toFloat()-5f){
+            flag=true
+            canvas.drawBitmap(img2,boxnewX2,boxy,null)
+            Log.d(this.toString(),"boxnewX2:$boxnewX2",null)
         }
-        canvas.drawBitmap(img, 0f,PlayerY.toFloat(), null)
+        if(flag){
+            boxnewX2+=boxmovingX
+            canvas.drawBitmap(img2,boxnewX2,boxy,null)
+        }
+        if(boxnewX2<=0){
+            Log.d(this.toString(),"11111111111111111",null)
+            boxnewX2=width-img2.width.toFloat()
+            //canvas.drawBitmap(img2,boxnewX2,boxy,null)
+            flag=false
+        }
+        canvas.drawBitmap(img, 10f,PlayerY.toFloat(), null)
         //Log.d(this.toString(),"SharedData.ground:${SharedData.ground} img.width:${img.width}",null)
         //Log.d(this.toString(),"boxnewX:${boxnewX} boxHeight:${img.width<=boxnewX&&SharedData.ground<=boxHeight}",null)
         canvas.drawBitmap(img2,boxnewX,boxy,null)
@@ -64,7 +88,7 @@ class GameStatus(context: Context) {
         canvas.drawText("Score : $FinalScore", 50F,70F,scorePaint )
     }
     fun update() {
-        when(shoot){
+        when(walk){
             1->{img = BitmapFactory.decodeResource(res, R.drawable.run00) }
             2->{img = BitmapFactory.decodeResource(res, R.drawable.run01)}
             3->{img = BitmapFactory.decodeResource(res, R.drawable.run02)}
@@ -72,10 +96,12 @@ class GameStatus(context: Context) {
             5->{img = BitmapFactory.decodeResource(res, R.drawable.run04)}
             6->{img = BitmapFactory.decodeResource(res, R.drawable.run05)}
         }
-        shoot++
-        if(shoot>6) {
-            shoot = 0
+        walk++
+        if(walk>6) {
+            walk = 0
         }
+    }
+    fun moving(){
         if(SharedData.flag==1){
             if(PlayerY>500) {
                 PlayerY += SharedData.up
@@ -92,10 +118,6 @@ class GameStatus(context: Context) {
                 SharedData.flag=3
             }
         }
-    }
-    fun relase() {
-        img.recycle()
-        img2.recycle()
     }
 
 }

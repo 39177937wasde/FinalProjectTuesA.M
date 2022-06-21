@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
                     var canvas: Canvas = surface.surfaceHolder.lockCanvas()
                     surface.drawSomething(canvas)
                     surface.surfaceHolder.unlockCanvasAndPost(canvas)
-                    Log.d(this.toString(),"newX:${SharedData.die}",null)
                     if(SharedData.die){
                         delay(10L)
                         var i =Intent(this@MainActivity,GameOver::class.java)
@@ -53,12 +52,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope by MainScope() {
         GlobalScope.launch {
             while(!SharedData.die){
                 surface.gameStatus.update()
-                Log.d(this.toString(),"13:${SharedData.die}",null)
                 delay(90)
             }
         }
-
-        Log.d(this.toString(),"Id d",null)
+        GlobalScope.launch {
+            while(!SharedData.die){
+                surface.gameStatus.moving()
+                delay(20)
+            }
+        }
 
     }
 

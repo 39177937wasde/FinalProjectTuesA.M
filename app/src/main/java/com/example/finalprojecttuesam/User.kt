@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 
 class User : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,8 +16,12 @@ class User : AppCompatActivity() {
         button.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             val name = ed_name.text.toString()
-            SharedData.userName=name
-            startActivity(intent)
+            if(name==""){
+                Toast.makeText(this, "請輸入名稱", Toast.LENGTH_SHORT).show()
+            }else if(name!="") {
+                SharedData.userName=name
+                startActivity(intent)
+            }
         }
     }
 }
